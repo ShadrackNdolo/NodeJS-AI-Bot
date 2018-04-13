@@ -45,7 +45,7 @@ var bot = new builder.UniversalBot(connector, [
     },
 
 
-   
+
 
     function (session, results) {
         session.dialogData.reservationName = results.response;
@@ -54,8 +54,8 @@ var bot = new builder.UniversalBot(connector, [
         session.send(`Reservation confirmed. <br> Reservation details: 
         <br/>Reservation name: ${session.dialogData.reservationName} 
         <br/>Date/Time: ${session.dialogData.reservationDate}
-        <br/>Party size: ${session.dialogData.partySize} 
-        <br/>Food: ${session.dialogData.food}`);
+        <br/>Food: ${session.dialogData.food}
+        <br/>Party size: ${session.dialogData.partySize}`);
         session.endDialog();
     }
 ]).set('storage', inMemoryStorage); // Register in-memory storage
