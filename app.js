@@ -27,12 +27,12 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, [
     function(session) {
         session.send("Welcome to the deployment.");
-        builder.Prompts.time(session, "Please provide the check-in and check-out date and time for this booking (e.g.: June 6th at 5pm/June 16th at 5pm)");
+        builder.Prompts.time(session, "Please provide your check-in date and time for this booking (e.g.: June 6th at 5pm/June 16th at 5pm)");
     },
 
     function(session, results) {
         session.dialogData.special = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.text(session, "Any other special requirements for your arrival?");
+        builder.Prompts.text(session, "What time would you like to check out? (Type undecided if unknown)");
     },
 
     function(session, results) {
@@ -58,7 +58,6 @@ var bot = new builder.UniversalBot(connector, [
         <br/>Reservation name: ${session.dialogData.reservationName} 
         <br/>Date/Time: ${session.dialogData.special}
         <br/>Rooms: ${session.dialogData.partySize}
-        <br/>Special Requirements: ${session.dialogData.reservationDate} 
         <br/>Dietary needs: ${session.dialogData.food}`);
         session.endDialog();
     }
