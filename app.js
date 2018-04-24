@@ -31,12 +31,12 @@ var bot = new builder.UniversalBot(connector, [
     },
 
     function(session, results) {
-        session.dialogData.dietary = builder.EntityRecognizer.resolveTime([results.response]);
+        session.dialogData.special = builder.EntityRecognizer.resolveTime([results.response]);
         builder.Prompts.text(session, "Any other special requirements for your arrival?");
     },
 
     function(session, results) {
-        session.dialogData.special = builder.EntityRecognizer.resolveTime([results.response]);
+        session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
         builder.Prompts.text(session, "Any special dietary requirements for your stay?");
     },
 
@@ -56,8 +56,9 @@ var bot = new builder.UniversalBot(connector, [
         // Process request and display reservation details
         session.send(`Reservation confirmed. <br> Reservation details: 
         <br/>Reservation name: ${session.dialogData.reservationName} 
-        <br/>Date/Time: ${session.dialogData.reservationDate}
-        <br/>Rooms: ${session.dialogData.partySize} 
+        <br/>Date/Time: ${session.dialogData.special}
+        <br/>Rooms: ${session.dialogData.partySize}
+        <br/>Special Requirements: ${session.dialogData.reservationDate} 
         <br/>Dietary needs: ${session.dialogData.food}`);
         session.endDialog();
     }
