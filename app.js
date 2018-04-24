@@ -27,21 +27,27 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 var bot = new builder.UniversalBot(connector, [
     function(session) {
         session.send("Welcome to the deployment.");
-        builder.Prompts.time(session, "Please provide a reservation date and time (e.g.: June 6th at 5pm)");
+        builder.Prompts.time(session, "Please provide the check-in and check-out date and time for this booking (e.g.: June 6th at 5pm/June 16th at 5pm)");
     },
+
     function(session, results) {
         session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.text(session, "What would you like to eat?");
+        builder.Prompts.text(session, "Any special dietary requirements?");
+    },
+
+    function(session, results) {
+        session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
+        builder.Prompts.text(session, "Any other special requirements for your stay?");
     },
 
     function(session, results) {
         session.dialogData.food = results.response;
-        builder.Prompts.text(session, "How many people are in your party?");
+        builder.Prompts.text(session, "How many rooms would you like to book? (MAXIMUM 2 PER ROOM)");
     },
 
     function(session, results) {
         session.dialogData.partySize = results.response;
-        builder.Prompts.text(session, "Whose name will this reservation be under?");
+        builder.Prompts.text(session, "What name would this booking be under?");
     },
 
     function(session, results) {
@@ -51,7 +57,7 @@ var bot = new builder.UniversalBot(connector, [
         session.send(`Reservation confirmed. <br> Reservation details: 
         <br/>Reservation name: ${session.dialogData.reservationName} 
         <br/>Date/Time: ${session.dialogData.reservationDate}
-        <br/>Party size: ${session.dialogData.partySize} 
+        <br/>Rooms: ${session.dialogData.partySize} 
         <br/>Food: ${session.dialogData.food}`);
         session.endDialog();
     }
