@@ -26,38 +26,22 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 // This is a dinner reservation bot that uses a waterfall technique to prompt users for input.
 var bot = new builder.UniversalBot(connector, [
     function(session) {
-        session.send("Welcome to the Reata Apartments.");
-        builder.Prompts.time(session, "At what date and time would you like to check in? (e.g.: June 6th at 5pm)");
+        session.send("Welcome to the deployment.");
+        builder.Prompts.time(session, "Please provide a reservation date and time (e.g.: June 6th at 5pm)");
     },
-
-    function(session) {
-        builder.Prompts.time(session, "At what date and time would you like to check out? (If unknown kindly respond with undecided)");
-    },
-
     function(session, results) {
-        session.dialogData.partySize = results.response;
-        builder.Prompts.text(session, "How many people will be staying?");
-    },
-
-    function(session, results) {
-        session.dialogData.rooms = results.response;
-        builder.Prompts.text(session, "How many rooms would you like to book? $150 Nightly rate.");
-    },
-
-    function(session, results) {
-        session.dialogData.requirements = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.text(session, "Any special requirements for your stay?");
+        session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
+        builder.Prompts.text(session, "What would you like to eat?");
     },
 
     function(session, results) {
         session.dialogData.food = results.response;
-        builder.Prompts.text(session, "Any special dietary requirements?");
+        builder.Prompts.text(session, "How many people are in your party?");
     },
 
-
     function(session, results) {
-        session.dialogData.reservationName = results.response;
-        builder.Prompts.text(session, "What name would this booking be under?");
+        session.dialogData.partySize = results.response;
+        builder.Prompts.text(session, "Whose name will this reservation be under?");
     },
 
     function(session, results) {
@@ -67,13 +51,9 @@ var bot = new builder.UniversalBot(connector, [
         session.send(`Reservation confirmed. <br> Reservation details: 
         <br/>Reservation name: ${session.dialogData.reservationName} 
         <br/>Date/Time: ${session.dialogData.reservationDate}
-        <br/>Check-in: ${session.dialogData.checkIn}
-        <br/>Check-out: ${session.dialogData.checkOut}
-        <br/>Prices:$150 per night
-        <br/>Rooms: ${session.dialogData.rooms}
-        <br/>Occupants: ${session.dialogData.partySize}
-        <br/>Dietary requirements: ${session.dialogData.food}
-        <br/>Special requirements: ${session.dialogData.requirements}`);
+        <br/>Party size: ${session.dialogData.partySize} 
+        <br/>Food: ${session.dialogData.food}`);
         session.endDialog();
     }
+
 ]).set('storage', inMemoryStorage); // Register in-memory storage
