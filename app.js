@@ -32,6 +32,11 @@ var bot = new builder.UniversalBot(connector, [
 
     function(session, results) {
         session.dialogData.special = builder.EntityRecognizer.resolveTime([results.response]);
+        builder.Prompts.text(session, "Would you like to enjoy some beverage(s) in the waiting lounge?");
+    },
+
+    function(session, results) {
+        session.dialogData.food = results.response;
         builder.Prompts.text(session, "What time would you like to check out? (Type undecided if unknown)");
     },
 
