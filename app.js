@@ -26,18 +26,28 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 // This is a dinner reservation bot that uses a waterfall technique to prompt users for input.
 var bot = new builder.UniversalBot(connector, [
     function(session) {
-        session.send("Welcome to the deployment.");
-        builder.Prompts.time(session, "Please provide your check-in date and time for this booking (e.g.: June 6th at 5pm/June 16th at 5pm)");
+        session.send("Welcome to the Reata Apartments.");
+        builder.Prompts.time(session, "Please provide the date and time for this booking (e.g.: June 6th at 5pm)");
     },
 
     function(session, results) {
         session.dialogData.special = builder.EntityRecognizer.resolveTime([results.response]);
-        builder.Prompts.text(session, "Would you like to enjoy some beverage(s) in the waiting lounge?");
+        builder.Prompts.text(session, "Would you like to make a reservation?");
     },
 
     function(session, results) {
-        session.dialogData.food = results.response;
-        builder.Prompts.text(session, "What time would you like to check out? (Type undecided if unknown)");
+        session.dialogData.checkout = builder.EntityRecognizer.resolveTime([results.response]);
+        builder.Prompts.text(session, "What day and time would you like to check in?");
+    },
+
+    function(session, results) {
+        session.dialogData.checkin = builder.EntityRecognizer.resolveTime([results.response]);
+        builder.Prompts.text(session, "What day and time would you like to check out? (Type undecided if unknown)");
+    },
+
+    function(session, results) {
+        session.dialogData.lounge = results.response;
+        builder.Prompts.text(session, "Would you like to enjoy some beverage(s) in the waiting lounge?");
     },
 
     function(session, results) {
@@ -62,6 +72,8 @@ var bot = new builder.UniversalBot(connector, [
         session.send(`Reservation confirmed. <br> Reservation details: 
         <br/>Reservation name: ${session.dialogData.reservationName} 
         <br/>Date/Time: ${session.dialogData.special}
+        <br/>Check-In: ${session.dialogData.checkout}
+        <br/>Checkout: ${session.dialogData.lounge}
         <br/>Rooms: ${session.dialogData.partySize}
         <br/>Dietary needs: ${session.dialogData.food}`);
         session.endDialog();
