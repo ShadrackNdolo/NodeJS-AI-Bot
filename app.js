@@ -38,26 +38,31 @@ var bot = new builder.UniversalBot(connector, [
         builder.Prompts.text(session, "Would you like to make a reservation?");
     },
 
+    //This is still undefined in the display.
     function(session, results) {
         session.dialogData.checkout = builder.EntityRecognizer.resolveTime([results.response]);
         builder.Prompts.text(session, "What day and time would you like to check in?");
     },
 
+    //This display checkout well.
     function(session, results) {
         session.dialogData.checkin = builder.EntityRecognizer.resolveTime([results.response]);
         builder.Prompts.text(session, "What day and time would you like to check out? (Type undecided if unknown)");
     },
 
+    //This is a test question, could be replaced with any other-returns string
     function(session, results) {
         session.dialogData.lounge = results.response;
         builder.Prompts.text(session, "Would you like to enjoy some beverage(s) in the waiting lounge?");
     },
 
+    //displays 
     function(session, results) {
         session.dialogData.reservationDate = builder.EntityRecognizer.resolveTime([results.response]);
         builder.Prompts.text(session, "Any special dietary requirements for your stay?");
     },
 
+    //displays
     function(session, results) {
         session.dialogData.food = results.response;
         builder.Prompts.text(session, "How many rooms would you like to book? (MAXIMUM 2 PER ROOM)");
@@ -68,6 +73,7 @@ var bot = new builder.UniversalBot(connector, [
         builder.Prompts.text(session, "What name would this booking be under?");
     },
 
+    //beverage,check-in are undefined
     function(session, results) {
         session.dialogData.reservationName = results.response;
 
