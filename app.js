@@ -25,11 +25,14 @@ var inMemoryStorage = new builder.MemoryBotStorage();
 
 // This is a dinner reservation bot that uses a waterfall technique to prompt users for input.
 var bot = new builder.UniversalBot(connector, [
+
+    //We are supposed to have the bot engage the conversation
     function(session) {
         session.send("Welcome to the Reata Apartments.");
         builder.Prompts.time(session, "Please provide the date and time for this booking (e.g.: June 6th at 5pm)");
     },
 
+    //This should be a yes or no question (yes links to questions, no to buttons e.g. inquiries)
     function(session, results) {
         session.dialogData.special = builder.EntityRecognizer.resolveTime([results.response]);
         builder.Prompts.text(session, "Would you like to make a reservation?");
@@ -72,6 +75,7 @@ var bot = new builder.UniversalBot(connector, [
         session.send(`Reservation confirmed. <br> Reservation details: 
         <br/>Reservation name: ${session.dialogData.reservationName} 
         <br/>Date/Time: ${session.dialogData.special}
+        <br/>Beverage: ${session.dialogData.drinks}
         <br/>Check-In: ${session.dialogData.checkout}
         <br/>Checkout: ${session.dialogData.lounge}
         <br/>Rooms: ${session.dialogData.partySize}
